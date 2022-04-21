@@ -310,6 +310,7 @@ class Engine(gym.Env, gym.utils.EzPickle):
         self.build_placements_dict()
 
         self.viewer = None
+        self.metadata = {"render.modes": ["human", "rgb_array"], "video.frames_per_second": 30}
         self.world = None
         self.clear()
 
@@ -1419,6 +1420,8 @@ class Engine(gym.Env, gym.utils.EzPickle):
                height=DEFAULT_HEIGHT
                ):
         ''' Render the environment to the screen '''
+        if camera_id is None:
+            camera_id = 1
 
         if self.viewer is None or mode!=self._old_render_mode:
             # Set camera if specified
