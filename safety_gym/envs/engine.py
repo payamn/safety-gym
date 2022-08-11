@@ -404,7 +404,7 @@ class Engine(gym.Env, gym.utils.EzPickle):
             obs_space_dict['com'] = gym.spaces.Box(-np.inf, np.inf, (3,), dtype=np.float32)
         if self.observe_sensors:
             for sensor in self.sensors_obs:  # Explicitly listed sensors
-                dim = self.robot.sensor_dim[sensor]
+                dim = self.robot.sensor_dim[sensor] - 1
                 obs_space_dict[sensor] = gym.spaces.Box(-np.inf, np.inf, (dim,), dtype=np.float32)
             # Velocities don't have wraparound effects that rotational positions do
             # Wraparounds are not kind to neural networks
@@ -868,7 +868,7 @@ class Engine(gym.Env, gym.utils.EzPickle):
         # Save last subtree center of mass
         self.last_subtreecom = self.world.get_sensor('subtreecom')
 
-    def reset(self):
+    def reset(self, state=None):
         ''' Reset the physics simulation and return observation '''
         self._seed += 1  # Increment seed
         self.rs = np.random.RandomState(self._seed)
@@ -879,6 +879,8 @@ class Engine(gym.Env, gym.utils.EzPickle):
 
         self.clear()
         self.build()
+        if state is not None:
+            self.world.sim.set_state(state)
         # Save the layout at reset
         self.reset_layout = deepcopy(self.layout)
 
@@ -1067,7 +1069,7 @@ class Engine(gym.Env, gym.utils.EzPickle):
         if self.observe_sensors:
             # Sensors which can be read directly, without processing
             for sensor in self.sensors_obs:  # Explicitly listed sensors
-                obs[sensor] = self.world.get_sensor(sensor)
+                obs[sensor] = self.world.get_sensor(sensor)[:2]
             for sensor in self.robot.hinge_vel_names:
                 obs[sensor] = self.world.get_sensor(sensor)
             for sensor in self.robot.ballangvel_names:
