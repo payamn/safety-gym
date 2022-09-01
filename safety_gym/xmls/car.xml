@@ -36,9 +36,6 @@
         <!--<jointvel joint="left" name="jointvel_left"/>
         <jointvel joint="right" name="jointvel_right"/>-->
 
-        <ballquat joint="rear" name="ballquat_rear"/>
-        <ballangvel joint="rear" name="ballangvel_rear"/>
-
         <!-- Used for observation -->
         <accelerometer site="robot" name="accelerometer"/>
         <velocimeter site="robot" name="velocimeter"/>

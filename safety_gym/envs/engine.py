@@ -404,7 +404,7 @@ class Engine(gym.Env, gym.utils.EzPickle):
             obs_space_dict['com'] = gym.spaces.Box(-np.inf, np.inf, (3,), dtype=np.float32)
         if self.observe_sensors:
             for sensor in self.sensors_obs:  # Explicitly listed sensors
-                dim = self.robot.sensor_dim[sensor]
+                dim = self.robot.sensor_dim[sensor] - 1
                 obs_space_dict[sensor] = gym.spaces.Box(-np.inf, np.inf, (dim,), dtype=np.float32)
             # Velocities don't have wraparound effects that rotational positions do
             # Wraparounds are not kind to neural networks
@@ -1069,7 +1069,7 @@ class Engine(gym.Env, gym.utils.EzPickle):
         if self.observe_sensors:
             # Sensors which can be read directly, without processing
             for sensor in self.sensors_obs:  # Explicitly listed sensors
-                obs[sensor] = self.world.get_sensor(sensor)
+                obs[sensor] = self.world.get_sensor(sensor)[:2]
             for sensor in self.robot.hinge_vel_names:
                 obs[sensor] = self.world.get_sensor(sensor)
             for sensor in self.robot.ballangvel_names:
