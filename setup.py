@@ -15,6 +15,5 @@ setup(
         'joblib>=0.14.0',
         'numpy>=1.17.4',
         'xmltodict>=0.12.0',
-        'mujuco_py>=2.1.2.14'
     ],
 )
